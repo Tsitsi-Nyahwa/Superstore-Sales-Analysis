@@ -353,3 +353,33 @@ ORDER BY year, month_num ASC;
 -- Q4 (Sep-Dec) consistently strongest quarter every year
 -- January and February consistently weakest months
 
+-- FURTHER ANALYSIS: ADVANCED SQL TECHNIQUES
+-- Query 1: Ranking Products by Profit Within Each Category (Window Function)
+SELECT
+    category,
+    product_name,
+    ROUND(SUM(profit), 2) AS total_profit,
+    RANK() OVER (PARTITION BY category ORDER BY SUM(profit) DESC) AS profit_rank
+FROM clean_orders
+GROUP BY category, product_name
+ORDER BY category, profit_rank;
+-- Window function ranks products by profit within each category
+-- Confirms Furniture and Technology both have severely loss-making products
+-- Useful for targeted discount review per category
+
+-- Query 2: Top Customer Segments by Profit (Using CTE)
+WITH segment_summary AS (
+    SELECT
+        segment,
+        COUNT(DISTINCT order_id) AS total_orders,
+        ROUND(SUM(sales), 2) AS total_sales,
+        ROUND(SUM(profit), 2) AS total_profit,
+        ROUND((SUM(profit) / SUM(sales)) * 100, 2) AS profit_margin_pct
+    FROM clean_orders
+    GROUP BY segment
+)
+SELECT *
+FROM segment_summary
+ORDER BY total_profit DESC;
+-- Home Office segment has highest profit margin (14.05%)
+-- Consumer segment largest by volume but lowest margin (11.53%)
