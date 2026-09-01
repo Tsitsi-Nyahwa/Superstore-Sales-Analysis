@@ -31,3 +31,9 @@ Performed in MySQL Workbench to uncover business insights around revenue, profit
 
 ## Files
 - 'superstore_sales_analysis.sql` — fulL cleaning and analysis script
+
+
+## Excel Dashboard
+Interactive dashboard with 7 charts, dynamic KPIs and slicers built in Excel.
+
+![Dashboard](Superstore Sales Dashboard.png)
